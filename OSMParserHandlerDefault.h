@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OSMParser.h"
-#import "RoadNetworkDAO.h"
+@class RoadNetworkDAO;
 
 @interface OSMParserHandlerDefault : NSObject <OSMParserDelegate> {
 	RoadNetworkDAO* outputDao;
