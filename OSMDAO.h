@@ -7,12 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+//Uses the sqlite embedded in spatialite and not the platform one.
 #import "sqlite3.h"
 #import "Node.h"
 #import "Way.h"
 #import "Relation.h"
 
-@interface RoadNetworkDAO : NSObject {
+@interface OSMDAO : NSObject {
 	sqlite3* dbHandle;
 	NSString* filePath;
 }
@@ -20,15 +21,20 @@
 @property (readonly) sqlite3* dbHandle;
 @property (readonly) NSString* filePath;
 
+
 -(id) initWithFilePath:(NSString*)filePath;
 
 -(id) initWithFilePath:(NSString*)filePath overrideIfExists:(BOOL)override;
 
 -(void) optimizeDB;
 
--(NSArray*) getMotorwaysRelationsIds;
+-(void) addContentFrom:(OSMDAO*)networkB;
 
 -(void) addNodes:(NSArray*)nodes;
+
+-(Node*) getNodeFromID:(NSUInteger)nodeId;
+
+-(NSArray*) getNodesForWay:(Way*)way;
 
 -(Way*) getWayWithID:(NSUInteger)wayid;
 
@@ -40,11 +46,7 @@
 
 -(void) addRelation:(Relation *)rel;
 
--(Node*) getNodeFromID:(NSUInteger)nodeId;
-
--(NSArray*) getNodesForWay:(Way*)way;
-
--(void) addContentFrom:(RoadNetworkDAO*)networkB;
+-(NSArray*) getMotorwaysRelationsIds;
 
 -(Relation*) getRelationWithID:(NSUInteger) relationid;
 

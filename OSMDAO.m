@@ -6,21 +6,20 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "RoadNetworkDAO.h"
+#import "OSMDAO.h"
 #import <CoreLocation/CoreLocation.h>
 #import "Node.h"
 #import "Way.h"
 #import "Relation.h"
 #import "GeoTools.h"
-//#import "spatialite.h"
+#import "spatialite.h"
 
-@interface RoadNetworkDAO (privateAPI)
+@interface OSMDAO (privateAPI)
 -(void) initDB;
 -(BOOL) addNode:(Node*) node;
 -(void) addNodeAsGeom:(Node*)node;
 -(Node*) createNodeFromStatement:(sqlite3_stmt*)stmt;
 -(void) addNodesIDsForWay:(Way*)way;
--(void) initDBForSpeedCamera; 
 
 -(NSUInteger) getRoadDefinitionMatchingArrayOfWays:(NSArray*)ways reference:(NSString*)ref;
 -(NSUInteger) getRoadDefinitionMatchingArrayOfWays:(NSArray*)ways reference:(NSString*)ref andSection:(NSString*)section;
@@ -39,12 +38,13 @@
 
 @end
 
-@implementation RoadNetworkDAO
+@implementation OSMDAO
 
 @synthesize dbHandle, filePath;
 
 +(void) initialize {
 	spatialite_init (1);
+	//[self createGeometryForWayId:1];
 }
 
 -(id) initWithFilePath:(NSString*)resPath overrideIfExists:(BOOL)override {
@@ -63,7 +63,6 @@
 		NSLog(@"OPEN OK");*/
 	if (!exists || (exists && override)) {
 		[self initDB];
-		[self initDBForSpeedCamera];
 	}
 	return self;
 	
@@ -92,6 +91,7 @@
 		NSAssert1(0, @"Error initializing DB. '%s'", sqlite3_errmsg(dbHandle));
 }
 
+/*
 -(void) initDBForSpeedCamera {
 	NSString* p = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"radarsInit.sql"];
 	NSString* initScript = [NSString stringWithContentsOfFile:p encoding:NSUTF8StringEncoding error:nil];
@@ -100,7 +100,18 @@
 	int returnValue = sqlite3_exec(dbHandle, sql, NULL, NULL, &errMsg);
 	if (returnValue!=SQLITE_OK)
 		NSAssert1(0, @"Error initializing DB for radars. '%s'", sqlite3_errmsg(dbHandle));
-}
+}*/
+/*
+-(GEOSGeometry*) createGeometryForWayId:(NSUInteger*)wayId {
+	NSLog(@"GEOS version %s", GEOSversion());
+	GEOSMessageHandler notice;
+	GEOSMessageHandler error;
+	GEOSContextHandle_t* GEOSHandle = initGEOS_r(notice, error);
+	GEOSWKBReader * reader = GEOSWKBReader_create();
+	//GEOSWKBReader_read(GEOSWKBReader* reader, const unsigned char *wkb, size_t size);
+}*/
+
+
 
 -(void) optimizeDB {
 	NSString* p = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"optimizeDb.sql"];
@@ -114,7 +125,7 @@
 		NSLog(@"[OPTIMIZE] OK" );
 }
 
--(void) addContentFrom:(RoadNetworkDAO*)networkB {
+-(void) addContentFrom:(OSMDAO*)networkB {
 	//NSString* req = @;
 	NSLog(@"merging with %@", networkB.filePath); 
 	//char* errMsg = NULL;
@@ -381,16 +392,17 @@
 	//NSLog(@"conversion double to int : %f %i", wayLength, wayLengthAsInt); 
 	wayAsWKT = [wayAsWKT stringByAppendingString:@")"];
 	//NSLog(@"wayasWKT is %@", wayAsWKT);
-	NSString* wayRef=[way.tags objectForKey:@"ref"];
-	NSString* wayName=[way.tags objectForKey:@"name"];
+	//NSString* wayRef=[way.tags objectForKey:@"ref"];
+	//NSString* wayName=[way.tags objectForKey:@"name"];
 	sqlite3_stmt *stmt;
 	if(sqlite3_prepare_v2(dbHandle, "INSERT INTO ways (wayid, ref, name, length, geom) VALUES (?, ?, ?, ?, GeomFromText(?, 4326))", -1, &stmt, NULL) != SQLITE_OK)
+	if(sqlite3_prepare_v2(dbHandle, "INSERT INTO ways (wayid, geom) VALUES (?, GeomFromText(?, 4326))", -1, &stmt, NULL) != SQLITE_OK)
 		NSAssert1(0, @"Error '%s'", sqlite3_errmsg(dbHandle));
 	sqlite3_bind_int(stmt, 1, way.wayId);
-	sqlite3_bind_text(stmt, 2, [wayRef UTF8String], -1, SQLITE_TRANSIENT);
-	sqlite3_bind_text(stmt, 3, [wayName UTF8String], -1, SQLITE_TRANSIENT);
-	sqlite3_bind_int(stmt, 4, wayLengthAsInt);
-	sqlite3_bind_text(stmt, 5, [wayAsWKT UTF8String], -1, SQLITE_TRANSIENT);
+	//sqlite3_bind_text(stmt, 2, [wayRef UTF8String], -1, SQLITE_TRANSIENT);
+	//sqlite3_bind_text(stmt, 3, [wayName UTF8String], -1, SQLITE_TRANSIENT);
+	//sqlite3_bind_int(stmt, 4, wayLengthAsInt);
+	sqlite3_bind_text(stmt, 2, [wayAsWKT UTF8String], -1, SQLITE_TRANSIENT);
 	if(SQLITE_DONE != sqlite3_step(stmt))
 		NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(dbHandle));
 	sqlite3_finalize(stmt);
@@ -613,7 +625,7 @@
 				else {
 					//apply the road def to all the ways.
 					const char * r=[[NSString stringWithFormat:@"UPDATE ways SET definitionid=%i where wayid IN (%@)", 
-									 roadDefinition, [RoadNetworkDAO waysIdsFromAsString:arrayOfWays]] cStringUsingEncoding:NSUTF8StringEncoding];
+									 roadDefinition, [OSMDAO waysIdsFromAsString:arrayOfWays]] cStringUsingEncoding:NSUTF8StringEncoding];
 					//NSLog(@"req is %s",r);
 					int returnValue = sqlite3_exec(dbHandle, r, NULL, NULL, NULL);
 					if (returnValue!=SQLITE_OK)

@@ -25,7 +25,7 @@
 -(id) initWithOutputFilePath:(NSString*)filePath overrideIfExists:(BOOL)override {
 	if (self!=[super init])
 		return nil;
-	outputDao=[[RoadNetworkDAO alloc] initWithFilePath:filePath overrideIfExists:override];
+	outputDao=[[OSMDAO alloc] initWithFilePath:filePath overrideIfExists:override];
 	nodesBuffer=[[NSMutableArray alloc] init];
 	waysBuffer=[[NSMutableArray alloc] init];
 	bufferMaxSize=30000;
@@ -117,9 +117,8 @@
 }
 
 -(void) parsingEnd {
-	//[self checkForWaysFlush];
-	//[outputDao optimizeDB];
-	NSLog(@"[PARSING DONE]");
+	[outputDao optimizeDB];
+	//NSLog(@"[PARSING DONE]");
 }
 
 @end

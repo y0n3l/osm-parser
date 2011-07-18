@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "OSMParser.h"
-@class RoadNetworkDAO;
+#import "OSMDAO.h"
 
 @interface OSMParserHandlerDefault : NSObject <OSMParserDelegate> {
-	RoadNetworkDAO* outputDao;
+	OSMDAO* outputDao;
 	NSUInteger bufferMaxSize;
 	NSUInteger nodesCounter;
 	NSUInteger waysCounter;
