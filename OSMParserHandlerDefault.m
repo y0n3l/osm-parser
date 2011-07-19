@@ -114,12 +114,10 @@
 }
 
 -(void) parsingStart {
-	//NSLog(@"PARSING start!");
 }
 
 -(void) parsingEnd {
 	[outputDao optimizeDB];
-	//NSLog(@"[PARSING DONE]");
 }
 
 @end

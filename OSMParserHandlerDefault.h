@@ -27,9 +27,9 @@
 	NSUInteger nodesCounter;
 	/** The total number of parsed ways. */
 	NSUInteger waysCounter;
-	/** Nodes memory storage before flush to DB in one single transaction. */
+	/** Nodes memory storage before DB flush in one single transaction. */
 	NSMutableArray* nodesBuffer;
-	/** Ways memory storage before flush to DB in one single transaction. */
+	/** Ways memory storage before DB flush in one single transaction. */
 	NSMutableArray* waysBuffer;
 	BOOL ignoreNodes;
 }
