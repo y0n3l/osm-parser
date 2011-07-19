@@ -2,7 +2,7 @@
 //  OSMParserHandlerDefault.m
 //  OSMImporter
 //
-//  Created by Lionel Gueganton on 1/17/11.
+//  Created by y0n3l http://www.twitter.com/y0n3l on 1/17/11.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
@@ -17,6 +17,7 @@
 @implementation OSMParserHandlerDefault
 
 @synthesize ignoreNodes;
+@synthesize bufferMaxSize;
 
 -(id) initWithOutputFilePath:(NSString*)output {
 	return [self initWithOutputFilePath:output overrideIfExists:YES];

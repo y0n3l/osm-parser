@@ -2,7 +2,7 @@
 //  OSMParser.m
 //  OSMImporter
 //
-//  Created by Lionel Gueganton on 1/14/11.
+//  Created by y0n3l http://www.twitter.com/y0n3l on 1/14/11.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
@@ -16,7 +16,6 @@
 	if (self!=[super init]) {
 		return nil;
 	}
-	nodes= [[NSMutableArray alloc] init];
 	isFirstNode=YES;
 	isFirstWay=YES;
 	isFirstRelation=YES;
@@ -30,18 +29,15 @@
 	if (self!=[super init]) {
 		return nil;
 	}
-	nodes= [[NSMutableArray alloc] init];
 	isFirstNode=YES;
 	isFirstWay=YES;
 	isFirstRelation=YES;
-	//NSData* data = [NSData dataWithContentsOfFile:osmFilePath];
 	parser=[[AQXMLParser alloc] initWithStream:osmStream];
 	[parser setDelegate:self];
 	return self;
 }
 
 - (void)dealloc {
-	[nodes release];
 	[parser release];
     [super dealloc];
 }
@@ -64,18 +60,14 @@
 }
 
 - (void)parserDidStartDocument:(AQXMLParser *)parser {
-//- (void)parserDidStartDocument:(NSXMLParser *)parser {
 	[delegate parsingStart];
 }
 
 - (void)parserDidEndDocument:(AQXMLParser *)parser {
-//- (void)parserDidEndDocument:(NSXMLParser *)parser {
 	[delegate parsingEnd];
 }
 
 - (void)parser:(AQXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
-//- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict {
-	//NSLog(@"start eleme %@", elementName);
 	if ([elementName isEqual:@"node"]) {
 		NSString* latitudeAsString=(NSString*)[attributeDict objectForKey:@"lat"];
 		NSString* longitudeAsString=(NSString*)[attributeDict objectForKey:@"lon"];
@@ -132,15 +124,12 @@
 	} 
 }
 
-//- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-//}
-
 - (void)parser:(AQXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-//- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
 	if ([elementName isEqual:@"node"]) {
 		if (isFirstNode) {
 			isFirstNode=NO;
-			[delegate didStartParsingNodes];
+			if ([(NSObject*)delegate respondsToSelector:@selector(didStartParsingNodes)])
+				[delegate didStartParsingNodes];
 		}
 		[delegate onNodeFound:currentNode];
 		[currentNode release];
@@ -150,7 +139,8 @@
 	} else if ([elementName isEqual:@"way"]) {
 		if (isFirstWay) {
 			isFirstWay=NO;
-			[delegate didStartParsingWays];
+			if ([(NSObject*)delegate respondsToSelector:@selector(didStartParsingWays)])
+				[delegate didStartParsingWays];
 		}
 		[delegate onWayFound:currentWay];
 		[currentWay release];

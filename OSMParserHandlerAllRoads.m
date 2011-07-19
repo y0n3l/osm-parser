@@ -2,7 +2,7 @@
 //  OSMParserHandlerAllRoads.m
 //  OSMImporter
 //
-//  Created by Lionel Gueganton on 2/11/11.
+//  Created by y0n3l http://www.twitter.com/y0n3l on 2/11/11.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
@@ -20,7 +20,7 @@
 
 -(void) onWayFound:(Way *)way {
 	NSString* highwayValue = [way.tags objectForKey:@"highway"]; 
-	if (highwayValue!=nil && ![highwayValue isEqualTo:@"service"])
+	if (highwayValue!=nil && ![highwayValue isEqualToString:@"service"])
 		[super onWayFound:way];
 }
 

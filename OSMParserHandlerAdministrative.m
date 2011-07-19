@@ -2,7 +2,7 @@
 //  OSMParserHandlerAdministrative.m
 //  OSMImporter
 //
-//  Created by Lionel Gueganton on 2/14/11.
+//  Created by y0n3l http://www.twitter.com/y0n3l on 2/14/11.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 

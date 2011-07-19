@@ -1,3 +1,8 @@
+--
+--
+-- This SQL script creates the DB model used to store information extracted during a .osm file parsing.
+--
+-- 
 SELECT InitSpatialMetaData();
 INSERT INTO spatial_ref_sys (srid, auth_name, auth_srid, ref_sys_name, proj4text) VALUES (4326, 'epsg', 4326,'WGS 84', '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs');
 CREATE TABLE "main"."nodes" ("nodeid" INTEGER PRIMARY KEY  NOT NULL , "latitude" DOUBLE NOT NULL , "longitude" DOUBLE NOT NULL );

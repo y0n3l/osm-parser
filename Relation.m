@@ -2,7 +2,7 @@
 //  Relation.m
 //  OSMImporter
 //
-//  Created by Philippe TORRELLI on 07/02/11.
+//  Created by y0n3l http://www.twitter.com/y0n3l on 1/15/11.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 

@@ -2,7 +2,7 @@
 //  RoadNetworkDAO.h
 //  OSMImporter
 //
-//  Created by Lionel Gueganton on 1/14/11.
+//  Created by y0n3l http://www.twitter.com/y0n3l on 1/14/11.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
@@ -17,21 +17,27 @@
 	sqlite3* dbHandle;
 	NSString* filePath;
 }
-
+/** The internal handle to the sqlite db */ 
 @property (readonly) sqlite3* dbHandle;
+/** The path to the db on the filesystem. */ 
 @property (readonly) NSString* filePath;
 
-
+/** Inits a new OSMDAO */
 -(id) initWithFilePath:(NSString*)filePath;
 
 -(id) initWithFilePath:(NSString*)filePath overrideIfExists:(BOOL)override;
 
+/** Executes an SQL script that remove the useless temporary tables / rows 
+ created during sto*/
 -(void) optimizeDB;
 
+/** Copies content from another OSMDAO to this one. */ 
 -(void) addContentFrom:(OSMDAO*)networkB;
 
+/** Stores the given nodes in one single transaction. */
 -(void) addNodes:(NSArray*)nodes;
 
+/** Returns a node from its nodeid. */
 -(Node*) getNodeFromID:(NSUInteger)nodeId;
 
 -(NSArray*) getNodesForWay:(Way*)way;
@@ -50,8 +56,9 @@
 
 -(Relation*) getRelationWithID:(NSUInteger) relationid;
 
--(void) associateNetworkToRoadsDefinitions;
+/*-(void) associateNetworkToRoadsDefinitions;
 
-/** Returns a rowid */
+//Returns a rowid
 -(NSUInteger) getRoadDefinitionMatchingRoadReference:(NSString*)ref andAngle:(NSUInteger)angle;
+ */
 @end

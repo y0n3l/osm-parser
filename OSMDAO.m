@@ -2,16 +2,16 @@
 //  RoadNetworkDAO.m
 //  OSMImporter
 //
-//  Created by Lionel Gueganton on 1/14/11.
+//  Created by y0n3l http://www.twitter.com/y0n3l on 1/14/11.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
 #import "OSMDAO.h"
-#import <CoreLocation/CoreLocation.h>
+//#import <CoreLocation/CoreLocation.h>
 #import "Node.h"
 #import "Way.h"
 #import "Relation.h"
-#import "GeoTools.h"
+//#import "GeoTools.h"
 #import "spatialite.h"
 
 @interface OSMDAO (privateAPI)
@@ -21,7 +21,7 @@
 -(Node*) createNodeFromStatement:(sqlite3_stmt*)stmt;
 -(void) addNodesIDsForWay:(Way*)way;
 
--(NSUInteger) getRoadDefinitionMatchingArrayOfWays:(NSArray*)ways reference:(NSString*)ref;
+/*-(NSUInteger) getRoadDefinitionMatchingArrayOfWays:(NSArray*)ways reference:(NSString*)ref;
 -(NSUInteger) getRoadDefinitionMatchingArrayOfWays:(NSArray*)ways reference:(NSString*)ref andSection:(NSString*)section;
 
 -(NSUInteger) getRoadDefinitionMatchingRoadReference:(NSString*)ref section:(NSString*)section andAngle:(NSUInteger)angleInDegrees;
@@ -34,7 +34,7 @@
 -(BOOL) isSameSection:(NSArray*)waysA as:(NSArray*)waysB;
 
 +(NSString*) waysIdsFromAsString:(NSArray*)arrayOfWays;
--(void) tagOffsetFor:(NSArray*) arrayOfWays;
+-(void) tagOffsetFor:(NSArray*) arrayOfWays;*/
 
 @end
 
@@ -368,7 +368,7 @@
 	NSArray* nodes = way.nodes;
 	if (nodes==nil)
 		nodes = [self getNodesForWay:way];
-	double wayLength=0;
+	//double wayLength=0;
 	NSString* wayAsWKT = @"LINESTRING(";
 	double previousLocation [2];
 	//previousLocation=NULL;
@@ -379,16 +379,16 @@
 		if (i<[way.nodesIds count]-1)
 			wayAsWKT = [wayAsWKT stringByAppendingString:@", "];
 		//CLLocation* location = [[CLLocation alloc] initWithLatitude:node.latitude longitude:node.longitude];
-		if (i>0) {
+		/*if (i>0) {
 			double dist = distance(previousLocation[0], previousLocation[1], node.latitude, node.longitude);
 			wayLength=wayLength+dist;
-		}
+		}*/
 		//[previousLocation release];
 		previousLocation[0]= node.latitude;
 		previousLocation[1]= node.longitude;
 	}
 	//[previousLocation release];
-	NSUInteger wayLengthAsInt = (NSUInteger)wayLength;
+	//NSUInteger wayLengthAsInt = (NSUInteger)wayLength;
 	//NSLog(@"conversion double to int : %f %i", wayLength, wayLengthAsInt); 
 	wayAsWKT = [wayAsWKT stringByAppendingString:@")"];
 	//NSLog(@"wayasWKT is %@", wayAsWKT);
@@ -545,6 +545,8 @@
 	return [relation autorelease];
 		
 }
+
+/*
 #pragma mark -
 -(NSUInteger) getRoadDefinitionMatchingRoadReference:(NSString*)ref andAngle:(NSUInteger)angleInDegrees {
 	return [self getRoadDefinitionMatchingRoadReference:ref section:nil andAngle:angleInDegrees];
@@ -920,7 +922,7 @@
 	}
 	return sections;
 	
-}
+}*/
 
 
 @end

@@ -2,7 +2,7 @@
 //  OSMParserHandlerAllRoads.h
 //  OSMImporter
 //
-//  Created by Lionel Gueganton on 2/11/11.
+//  Created by y0n3l http://www.twitter.com/y0n3l on 2/11/11.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
