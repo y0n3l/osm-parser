@@ -6,7 +6,9 @@
 
 ## Dependency
 
-The only required sources files are the ones needed to use the AQXMLParser (aka StreamingXMLParser) 
+The only required sources files are the ones needed to use the AQXMLParser (aka StreamingXMLParser) from Alan Quatermain Toolkit [2]
+
+[2]: https://github.com/AlanQuatermain/aqtoolkit
 
     #import "OSMParser.h"
     #import "OSMParserHandlerDefault.h"

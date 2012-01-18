@@ -56,8 +56,21 @@
 
 -(Relation*) getRelationWithID:(NSUInteger) relationid;
 
-/*-(void) associateNetworkToRoadsDefinitions;
+-(void) associateNetworkToRoadsDefinitions;
 
+-(NSDictionary*) tagsForRelation:(NSInteger) relationId;
+
+-(NSDictionary*) tagsForWay:(NSInteger) wayId;
+
+-(NSArray*) getWaysIdsMembersForRelationWithId:(NSInteger) relationId;
+
+#pragma DB normalization
+-(void) populateWaysInfo;
+
+-(NSInteger) updateOrSaveWayInfoWithName:(NSString*)name andReference:(NSString*)ref;
+
+
+/*
 //Returns a rowid
 -(NSUInteger) getRoadDefinitionMatchingRoadReference:(NSString*)ref andAngle:(NSUInteger)angle;
  */

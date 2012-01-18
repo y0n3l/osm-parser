@@ -18,6 +18,7 @@
 
 @synthesize ignoreNodes;
 @synthesize bufferMaxSize;
+@synthesize optimizeOnFinished;
 
 -(id) initWithOutputFilePath:(NSString*)output {
 	return [self initWithOutputFilePath:output overrideIfExists:YES];
@@ -30,6 +31,7 @@
 	nodesBuffer=[[NSMutableArray alloc] init];
 	waysBuffer=[[NSMutableArray alloc] init];
 	bufferMaxSize=30000;
+    optimizeOnFinished = YES;
 	return self;
 }
 
@@ -117,7 +119,8 @@
 }
 
 -(void) parsingEnd {
-	[outputDao optimizeDB];
+    if (optimizeOnFinished)
+        [outputDao optimizeDB];
 }
 
 @end
