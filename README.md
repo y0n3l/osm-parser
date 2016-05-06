@@ -19,6 +19,7 @@ The only required sources files are the ones needed to use the AQXMLParser (aka 
     NSString* mySpatialiteOutputFile = @"path/to/your/file/spatial.db";
     OSMParser* parser = [[OSMParser alloc] initWithOSMFile:myOsmInputFile];
     OSMParserHandlerDefault* handler = [[OSMParserHandlerDefault alloc] initWithOutputFilePath:mySpatialiteOutputFile];
+    parser.delegate = handler;
     [parser parse];
     [parser release];
     [handler release];
